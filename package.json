@@ -1,0 +1,25 @@
+{
+  "name": "prima",
+  "version": "1.0.0",
+  "description": "learning prisma ",
+  "main": "index.js",
+  "scripts": {
+    "dev": "npx nodemon --exec ts-node src/index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/matherique/prima.git"
+  },
+  "author": "Matheus Henrique",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/matherique/prima/issues"
+  },
+  "homepage": "https://github.com/matherique/prima#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.12",
+    "ts-node": "^10.2.1",
+    "typescript": "^4.4.2"
+  }
+}
