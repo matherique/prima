@@ -4,9 +4,9 @@ services:
   database: 
     image: postgres
     environment:
-      - POSTGRES_DB=prisma
-      - POSTGRES_USER=prisma
-      - POSTGRES_PASSWORD=kFMdvvxmvd
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     ports: 
-      - "5430:5432"
+      - "${POSTGRES_PORT}:5432"
 
