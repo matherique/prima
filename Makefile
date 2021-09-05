@@ -9,8 +9,7 @@ clean:
 log: 
 	docker-compose logs 
 
-prisma generate:
-	find ./**/*.prisma | grep -v schema.prisma | xargs cat > prisma/schema.prisma | npx prisma generate
+generate:
+	echo "generating schema.prisma file...."
+	find ./**/*.prisma | grep -v schema.prisma | xargs cat > prisma/schema.prisma
 
-prisma migrate:
-	find ./**/*.prisma | grep -v schema.prisma | xargs cat > prisma/schema.prisma | npx prisma migrate dev --name $$name
