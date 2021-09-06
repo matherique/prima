@@ -11,5 +11,5 @@ log:
 
 generate:
 	echo "generating schema.prisma file...."
-	find ./**/*.prisma | grep -v schema.prisma | xargs cat > prisma/schema.prisma
+	find src/. -name *.prisma | grep -v schema.prisma | xargs cat > src/prisma/schema.prisma
 
