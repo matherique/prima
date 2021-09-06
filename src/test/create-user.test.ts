@@ -1,42 +1,5 @@
-type CreateUserParams = {
-  firstName: string
-  lastName: string
-  email: string
-}
-
-type UserModel = {
-  id: number
-  firstName: string
-  lastName: string
-  email: string
-  createdAt: Date
-  updateAt: Date
-}
-
-interface CreateUser {
-  create: (params: CreateUserParams) => Promise<UserModel>
-}
-
-class CreateUserUsecase {
-  constructor(private readonly createUserRepository: CreateUserRepository) {}
-
-  async create(data: CreateUserParams): Promise<UserModel> {
-    const createdUser = await this.createUserRepository.save(data)
-
-    if (!createdUser) {
-      return null
-    }
-
-    return createdUser
-  }
-}
-
-type CreateUserRepositoryParams = CreateUserParams
-
-interface CreateUserRepository {
-  save: (data: CreateUserRepositoryParams) => Promise<UserModel | null> 
-}
-
+import { CreateUserUsecase } from "../modules/user/usercases/create-user";
+import { CreateUserRepository, CreateUserRepositoryParams, UserModel } from "../modules/user/usercases/ports/create-user-repository";
 
 class CreateUserRepositorySpy implements CreateUserRepository {
   public saveCount: number = 0;
@@ -104,6 +67,7 @@ describe("Create user", () => {
 
     const result = await sut.create(userData)
     expect(result).toBeNull()
+    expect(repositorySpy.saveCount).toBe(1)
   })
 
 })
