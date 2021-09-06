@@ -6,7 +6,7 @@ export type UserModel = {
   lastName: string
   email: string
   createdAt: Date
-  updateAt: Date
+  updatedAt: Date
 }
 
 
