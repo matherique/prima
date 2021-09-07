@@ -1,5 +1,5 @@
-import { CreateUserUsecase } from "../modules/user/usercases/create-user";
-import { CreateUserRepository, CreateUserRepositoryParams, UserModel } from "../modules/user/usercases/ports/create-user-repository";
+import { CreateUserUsecase } from "./create-user";
+import { CreateUserRepository, CreateUserRepositoryParams, UserModel } from "./ports/create-user-repository";
 
 class CreateUserRepositorySpy implements CreateUserRepository {
   public saveCount: number = 0;
@@ -49,7 +49,7 @@ describe("Create user", () => {
       ...userData, 
       id: 1, 
       createdAt: new Date(),
-      updateAt: new Date() 
+      updatedAt: new Date() 
     }
 
     const result = await sut.create(userData)

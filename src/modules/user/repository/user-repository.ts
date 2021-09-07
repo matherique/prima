@@ -10,7 +10,7 @@ export class UserRepository implements CreateUserRepository {
       where: { email: data.email }
     })
 
-    if (!usedEmail) {
+    if (usedEmail) {
       return null
     }
 

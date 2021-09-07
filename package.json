@@ -9,7 +9,7 @@
     "prisma:generate": "make -s generate && npx prisma generate --schema src/prisma/schema.prisma",
     "prisma:format": "make -s generate && npx prisma format --schema src/prisma/schema.prisma",
     "test": "jest",
-    "test:watch": "jest --watch --bail"
+    "test:watch": "jest --watch --bail --verbose"
   },
   "repository": {
     "type": "git",
@@ -26,6 +26,7 @@
     "@types/node": "^16.7.10",
     "dotenv": "^10.0.0",
     "jest": "^27.1.0",
+    "jest-mock-extended": "^2.0.2-beta2",
     "nodemon": "^2.0.12",
     "prisma": "^2.30.2",
     "ts-jest": "^27.0.5",
