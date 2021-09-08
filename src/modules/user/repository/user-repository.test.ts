@@ -25,24 +25,31 @@ describe("User repository", () => {
       email: "any_email@email.com"
     }
 
+    const insertedUser = {
+      ...userData,
+      id: 1,
+      updatedAt: new Date(),
+      createdAt: new Date(),
+    }
+
     it("should call create and return new user data", async () => {
       const repo = new UserRepository(mockPrisma)
-      const createdResponse = {
-        ...userData,
-        id: 1,
-        updatedAt: new Date(),
-        createdAt: new Date(),
-      }
 
       mockPrisma.user.findUnique.mockResolvedValue(null)
-      mockPrisma.user.create.mockResolvedValue(createdResponse)
+      mockPrisma.user.create.mockResolvedValue(insertedUser)
 
       const resp = await repo.save(userData)
 
-      expect(resp).toEqual(createdResponse)
+      expect(resp).toEqual(insertedUser)
     })
     
-    it.todo("should return null if email already been used")
+    it("should return null if email already been used", async () => {
+      const repo = new UserRepository(mockPrisma)
+      mockPrisma.user.findUnique.mockResolvedValue(insertedUser)
+      const resp = await repo.save(userData)
+
+      expect(resp).toEqual(null)
+    })
   })
 })
 
