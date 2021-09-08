@@ -1,5 +1,6 @@
+import { mocked } from 'ts-jest/utils';
 import { UserRepository } from "./user-repository"
-import database from '../../../config/database'
+import db from '../../../config/database'
 
 jest.mock('../../../config/database', () => {
   return {
@@ -10,15 +11,13 @@ jest.mock('../../../config/database', () => {
   };
 });
 
-
-const makeSut = () => {
-  const mocked = database as jest.Mocked<typeof database>
-  const repo = new UserRepository(mocked)
-
-  return { repo, prisma: mocked }
-}
-
 describe("User repository", () => {
+  const mockPrisma = mocked(db, true)
+
+  beforeEach(() => {
+    mockPrisma.user.create.mockClear()
+  })
+
   describe("#save", () => {
     const userData = {
       firstName: "any_firstName",
@@ -27,7 +26,7 @@ describe("User repository", () => {
     }
 
     it("should call create and return new user data", async () => {
-      const { repo, prisma } = makeSut()
+      const repo = new UserRepository(mockPrisma)
       const createdResponse = {
         ...userData,
         id: 1,
@@ -35,12 +34,8 @@ describe("User repository", () => {
         createdAt: new Date(),
       }
 
-      // TODO: fix this type problem
-      // @ts-ignore
-      prisma.user.findUnique.mockResolvedValue(null)
-      
-      // @ts-ignore
-      prisma.user.create.mockResolvedValue(createdResponse)
+      mockPrisma.user.findUnique.mockResolvedValue(null)
+      mockPrisma.user.create.mockResolvedValue(createdResponse)
 
       const resp = await repo.save(userData)
 
