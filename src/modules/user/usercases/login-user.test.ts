@@ -4,9 +4,11 @@ import { FindByEmailRepository } from "./ports/find-by-email-repository"
 import { HashingService } from "./ports/hashing-service"
 
 class HashingSpy implements HashingService {
+  public compareCount = 0;
   public compareReturn: boolean 
 
   async compare(value: string, hashed: string): Promise<boolean> {
+    this.compareCount += 1
     return this.compareReturn
   }
 }
@@ -61,7 +63,20 @@ describe("#Login user", () => {
     expect(repositorySpy.findResponse).toBe(null)
   })
 
-  test.todo("should compare the given password and the founded in database")
+  test("should compare the given password and the founded in database", async () => {
+    const loginData = {
+      email: 'any_email',
+      password: 'any_password'
+    }
+
+    const { sut, repositorySpy, hashingSpy } = makeSut()
+
+    repositorySpy.findResponse = db_user;
+
+    await sut.login(loginData)
+
+    expect(hashingSpy.compareCount).toBe(1)
+  })
 
   test("should return null if the password is incorret", async () => {
     const loginData = {
