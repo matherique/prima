@@ -95,5 +95,17 @@ describe("#Login user", () => {
     expect(response).toBe(null)
   })
 
-  test.todo("should create a token within the user id")
+  test("should create a token within the user id", async () => {
+    const loginData = {
+      email: 'any_email',
+      password: 'any_password'
+    }
+
+    const { sut, repositorySpy, hashingSpy } = makeSut()
+
+    repositorySpy.findResponse = db_user;
+    hashingSpy.compareReturn = false
+
+    const response = await sut.login(loginData)
+  })
 })
