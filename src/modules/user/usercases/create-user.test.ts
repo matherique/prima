@@ -25,6 +25,7 @@ describe("Create user", () => {
   const userData = {
     firstName: 'any_firstname',
     lastName: 'any_lastname',
+    password: 'any_password',
     email: 'any_email@email.com',
   }
 

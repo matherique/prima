@@ -22,6 +22,7 @@ describe("User repository", () => {
     const userData = {
       firstName: "any_firstName",
       lastName: "any_lastName",
+      password: "any_password",
       email: "any_email@email.com"
     }
 
