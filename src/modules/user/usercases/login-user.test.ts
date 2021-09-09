@@ -2,6 +2,7 @@ import { User } from ".prisma/client"
 import { LoginUser } from "./login-user"
 import { FindByEmailRepository } from "./ports/find-by-email-repository"
 import { HashingService } from "./ports/hashing-service"
+import { TokenService } from "./ports/token-service";
 
 class HashingSpy implements HashingService {
   public compareCount = 0;
@@ -25,15 +26,25 @@ class FindByEmailRepositorySpy implements FindByEmailRepository {
   }
 }
 
+class TokenServiceSpy implements TokenService {
+  public createReturn: string
+
+  async create(payload: any): Promise<string> {
+    return this.createReturn
+  }
+}
+
 const makeSut = () => {
   const repositorySpy = new FindByEmailRepositorySpy()
   const hashingSpy = new HashingSpy()
-  const sut = new LoginUser(repositorySpy, hashingSpy)
+  const tokenServiceSpy = new TokenServiceSpy()
+  const sut = new LoginUser(repositorySpy, hashingSpy, tokenServiceSpy)
 
   return { 
     sut,
     repositorySpy,
     hashingSpy,
+    tokenServiceSpy,
   }
 }
 
@@ -101,11 +112,21 @@ describe("#Login user", () => {
       password: 'any_password'
     }
 
-    const { sut, repositorySpy, hashingSpy } = makeSut()
+    const { 
+      sut, 
+      repositorySpy, 
+      hashingSpy,
+      tokenServiceSpy
+    } = makeSut()
+
+    const token = 'any_token'
 
     repositorySpy.findResponse = db_user;
-    hashingSpy.compareReturn = false
+    tokenServiceSpy.createReturn = token
+    repositorySpy.findResponse = db_user;
+    hashingSpy.compareReturn = true
 
     const response = await sut.login(loginData)
+    expect(response).toEqual({ token })
   })
 })

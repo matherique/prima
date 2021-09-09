@@ -1,11 +1,13 @@
 import { LoginUserUsecase, LoginUserUsecaseParams, LoginUserUsecaseResult } from "../domain/usecases/login-user";
 import { FindByEmailRepository } from "./ports/find-by-email-repository";
 import { HashingService } from "./ports/hashing-service";
+import { TokenService } from "./ports/token-service";
 
 export class LoginUser implements LoginUserUsecase {
   constructor(
     private readonly findByEmailRepository: FindByEmailRepository,
     private readonly hashingService: HashingService,
+    private readonly tokenService: TokenService,
   ) {}
 
   async login({ email, password }: LoginUserUsecaseParams): Promise<LoginUserUsecaseResult> {
@@ -20,8 +22,10 @@ export class LoginUser implements LoginUserUsecase {
     if (!isCorretPassword) { 
       return null
     }
+    
+    const token = await this.tokenService.create({ id: user.id })
 
-    return undefined
+    return { token }
   }
 
 }
