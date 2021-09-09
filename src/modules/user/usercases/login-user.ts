@@ -11,7 +11,7 @@ export class LoginUser implements LoginUserUsecase {
   ) {}
 
   async login({ email, password }: LoginUserUsecaseParams): Promise<LoginUserUsecaseResult> {
-    const user = await this.findByEmailRepository.find(email)
+    const user = await this.findByEmailRepository.findByEmail(email)
 
     if (!user) {
       return null

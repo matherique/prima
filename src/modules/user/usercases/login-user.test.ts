@@ -1,4 +1,4 @@
-import { User } from ".prisma/client"
+import { User } from "@prisma/client"
 import { LoginUser } from "./login-user"
 import { FindByEmailRepository } from "./ports/find-by-email-repository"
 import { HashingService } from "./ports/hashing-service"
@@ -19,7 +19,7 @@ class FindByEmailRepositorySpy implements FindByEmailRepository {
   public findEmail: string
   public findResponse: User|null
 
-  async find(email: string): Promise<User|null> {
+  async findByEmail(email: string): Promise<User|null> {
     this.findCallCount += 1
     this.findEmail = email
     return this.findResponse

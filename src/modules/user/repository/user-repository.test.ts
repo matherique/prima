@@ -33,22 +33,48 @@ describe("User repository", () => {
       createdAt: new Date(),
     }
 
-    it("should call create and return new user data", async () => {
-      const repo = new UserRepository(mockPrisma)
+    test("should call create and return new user data", async () => {
+      const sut = new UserRepository(mockPrisma)
 
-      mockPrisma.user.findUnique.mockResolvedValue(null)
-      mockPrisma.user.create.mockResolvedValue(insertedUser)
+      mockPrisma.user.findUnique.mockResolvedValueOnce(null)
+      mockPrisma.user.create.mockResolvedValueOnce(insertedUser)
 
-      const resp = await repo.save(userData)
+      const resp = await sut.save(userData)
 
       expect(resp).toEqual(insertedUser)
     })
     
-    it("should return null if email already been used", async () => {
-      const repo = new UserRepository(mockPrisma)
-      mockPrisma.user.findUnique.mockResolvedValue(insertedUser)
-      const resp = await repo.save(userData)
+    test("should return null if email already been used", async () => {
+      const sut = new UserRepository(mockPrisma)
+      mockPrisma.user.findUnique.mockResolvedValueOnce(insertedUser)
+      const resp = await sut.save(userData)
 
+      expect(resp).toEqual(null)
+    })
+  })
+
+  describe("#findByEmail", () => {
+    const insertedUser = {
+      id: 1,
+      firstName: 'any_firstName',
+      lastName: 'any_lastName',
+      email: 'any_email',
+      password: 'any_password',
+      updatedAt: new Date(),
+      createdAt: new Date(),
+    }
+
+    test("should return a valid user if email it was registered", async () => {
+      const sut = new UserRepository(mockPrisma)
+      mockPrisma.user.findUnique.mockResolvedValueOnce(insertedUser)
+      const resp = await sut.findByEmail(insertedUser.email)
+      expect(resp).toEqual(insertedUser)
+    })
+
+    test("should return null if unregistered email it was provided", async () => {
+      const sut = new UserRepository(mockPrisma)
+      mockPrisma.user.findUnique.mockResolvedValueOnce(null)
+      const resp = await sut.findByEmail('unregistered_email')
       expect(resp).toEqual(null)
     })
   })
