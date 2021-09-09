@@ -3,7 +3,7 @@ module.exports = {
   preset: 'ts-jest',
   resetMocks: true,
   clearMocks: true,
-  collectCoverage: true,
+  collectCoverage: false,
   coverageDirectory: "coverage",
   coverageProvider: "v8",
   coverageReporters: [
@@ -21,7 +21,4 @@ module.exports = {
   },
   watchPathIgnorePatterns: ["node_modules"],
   transformIgnorePatterns: ["node_modules"],
-  collectCoverageFrom: [
-    "src/**/*.ts"
-  ]
 };
