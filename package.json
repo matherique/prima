@@ -6,11 +6,11 @@
   "scripts": {
     "predev": "make -s generate",
     "dev": "npx nodemon --exec ts-node src/index.ts",
-    "prisma:generate": "make -s generate && npx prisma generate --schema src/prisma/schema.prisma",
-    "prisma:format": "make -s generate && npx prisma format --schema src/prisma/schema.prisma",
+    "prisma:generate": "make -s generate && npx prisma generate --schema src/infra/prisma/schema.prisma",
+    "prisma:format": "make -s generate && npx prisma format --schema src/infra/prisma/schema.prisma",
     "test": "npx jest",
-    "test:watch": "npx jest --watch --bail --verbose --runInBand",
-    "test:cov": "npx jest --coverage --watchAll"
+    "test:watch": "npx jest --watch --bail --verbose --runInBand --clearCache",
+    "test:cov": "npx jest --coverage"
   },
   "repository": {
     "type": "git",
