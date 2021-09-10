@@ -8,8 +8,9 @@
     "dev": "npx nodemon --exec ts-node src/index.ts",
     "prisma:generate": "make -s generate && npx prisma generate --schema src/prisma/schema.prisma",
     "prisma:format": "make -s generate && npx prisma format --schema src/prisma/schema.prisma",
-    "test": "jest",
-    "test:watch": "jest --watch --bail --verbose"
+    "test": "npx jest",
+    "test:watch": "npx jest --watch --bail --verbose --runInBand",
+    "test:cov": "npx jest --coverage --watchAll"
   },
   "repository": {
     "type": "git",
