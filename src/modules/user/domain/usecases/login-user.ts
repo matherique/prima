@@ -1,7 +1,6 @@
-export type LoginUserUsecaseParams = {
-  email: string
-  password: string
-}
+import { User } from "../models/user"
+
+export type LoginUserUsecaseParams = Pick<User, "email" | "password">
 
 export type LoginUserUsecaseResult = {
   token: string
