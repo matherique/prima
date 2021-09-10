@@ -1,10 +1,10 @@
 import { CreateUserParams } from "../domain/usecases/create-user"
-import { CreateUserRepository, UserModel } from "./ports/create-user-repository"
+import { CreateUserRepository, CreateUserRepositoryResult } from "./ports/create-user-repository"
 
 export class CreateUserUsecase {
   constructor(private readonly createUserRepository: CreateUserRepository) {}
 
-  async create(data: CreateUserParams): Promise<UserModel> {
+  async create(data: CreateUserParams): Promise<CreateUserRepositoryResult> {
     const createdUser = await this.createUserRepository.save(data)
 
     if (!createdUser) {

@@ -1,18 +1,11 @@
-import { CreateUserParams } from "../../domain/usecases/create-user"
+import { User } from "@prisma/client";
+import { CreateUserParams } from "../../domain/usecases/create-user";
 
-export type UserModel = {
-  id: number
-  firstName: string
-  lastName: string
-  email: string
-  createdAt: Date
-  updatedAt: Date
-}
-
-
-export type CreateUserRepositoryParams = CreateUserParams
+export type CreateUserRepositoryResult = User | null;
+export type CreateUserRepositoryParams = CreateUserParams;
 
 export interface CreateUserRepository {
-  save: (data: CreateUserRepositoryParams) => Promise<UserModel | null> 
+  save: (
+    data: CreateUserRepositoryParams
+  ) => Promise<CreateUserRepositoryResult>;
 }
-

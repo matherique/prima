@@ -1,12 +1,12 @@
 import { CreateUserUsecase } from "./create-user";
-import { CreateUserRepository, CreateUserRepositoryParams, UserModel } from "./ports/create-user-repository";
+import { CreateUserRepository, CreateUserRepositoryParams, CreateUserRepositoryResult } from "./ports/create-user-repository";
 
 class CreateUserRepositorySpy implements CreateUserRepository {
   public saveCount: number = 0;
   public saveParams: CreateUserRepositoryParams
-  public saveReturn: UserModel
+  public saveReturn: CreateUserRepositoryResult
 
-  async save(data: CreateUserRepositoryParams): Promise<UserModel | null> {
+  async save(data: CreateUserRepositoryParams): Promise<CreateUserRepositoryResult> {
     this.saveCount++;
     this.saveParams = data
 
