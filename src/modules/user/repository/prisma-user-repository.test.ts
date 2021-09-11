@@ -7,6 +7,7 @@ jest.mock("../../../infra/prisma/client", () => {
     user: {
       create: jest.fn(),
       findUnique: jest.fn(),
+      findMany: jest.fn(),
     },
   };
 });
@@ -78,4 +79,30 @@ describe("Prisma User repository", () => {
       expect(resp).toEqual(null);
     });
   });
+
+  describe("#findAll", () => {
+    const insertedUser = {
+      id: 1,
+      firstName: "any_firstName",
+      lastName: "any_lastName",
+      email: "any_email",
+      password: "any_password",
+      updatedAt: new Date(),
+      createdAt: new Date(),
+    };
+
+    test("should return empty array if no usar is found", async () => {
+      const sut = new PrismaUserRepository(mockPrisma);
+      mockPrisma.user.findMany.mockResolvedValueOnce([]);
+      const resp = await sut.findAll();
+      expect(resp).toEqual([]);
+    })
+
+    test("should return an array or users", async () => {
+      const sut = new PrismaUserRepository(mockPrisma);
+      mockPrisma.user.findMany.mockResolvedValueOnce([insertedUser]);
+      const resp = await sut.findAll();
+      expect(resp).toEqual([insertedUser]);
+    })
+  })
 });
