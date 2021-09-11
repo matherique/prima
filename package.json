@@ -8,7 +8,7 @@
     "prisma:generate": "npx prisma generate --schema src/infra/prisma/schema.prisma",
     "prisma:format": "npx prisma format --schema src/infra/prisma/schema.prisma",
     "test": "npx jest",
-    "test:watch": "npx jest --watch --bail --verbose --runInBand --clearCache",
+    "test:watch": "npx jest --watch --bail --verbose --runInBand",
     "test:cov": "npx jest --coverage"
   },
   "repository": {
