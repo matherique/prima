@@ -1,5 +1,5 @@
 import { mocked } from "ts-jest/utils";
-import { UserRepository } from "./user-repository";
+import { PrismaUserRepository } from "./prisma-user-repository";
 import db from "../../../infra/prisma/client";
 
 jest.mock("../../../infra/prisma/client", () => {
@@ -11,7 +11,7 @@ jest.mock("../../../infra/prisma/client", () => {
   };
 });
 
-describe("User repository", () => {
+describe("Prisma User repository", () => {
   const mockPrisma = mocked(db, true);
 
   beforeEach(() => {
@@ -34,7 +34,7 @@ describe("User repository", () => {
     };
 
     test("should call create and return new user data", async () => {
-      const sut = new UserRepository(mockPrisma);
+      const sut = new PrismaUserRepository(mockPrisma);
 
       mockPrisma.user.findUnique.mockResolvedValueOnce(null);
       mockPrisma.user.create.mockResolvedValueOnce(insertedUser);
@@ -45,7 +45,7 @@ describe("User repository", () => {
     });
 
     test("should return null if email already been used", async () => {
-      const sut = new UserRepository(mockPrisma);
+      const sut = new PrismaUserRepository(mockPrisma);
       mockPrisma.user.findUnique.mockResolvedValueOnce(insertedUser);
       const resp = await sut.save(userData);
 
@@ -65,14 +65,14 @@ describe("User repository", () => {
     };
 
     test("should return a valid user if email it was registered", async () => {
-      const sut = new UserRepository(mockPrisma);
+      const sut = new PrismaUserRepository(mockPrisma);
       mockPrisma.user.findUnique.mockResolvedValueOnce(insertedUser);
       const resp = await sut.findByEmail(insertedUser.email);
       expect(resp).toEqual(insertedUser);
     });
 
     test("should return null if unregistered email it was provided", async () => {
-      const sut = new UserRepository(mockPrisma);
+      const sut = new PrismaUserRepository(mockPrisma);
       mockPrisma.user.findUnique.mockResolvedValueOnce(null);
       const resp = await sut.findByEmail("unregistered_email");
       expect(resp).toEqual(null);

@@ -3,7 +3,7 @@ import { CreateUserRepository, CreateUserRepositoryResult } from '../usercases/p
 import { PrismaClient, User } from '@prisma/client';
 import { FindByEmailRepository } from '../usercases/ports/find-by-email-repository';
 
-export class UserRepository implements CreateUserRepository, FindByEmailRepository {
+export class PrismaUserRepository implements CreateUserRepository, FindByEmailRepository {
   constructor(private readonly db: PrismaClient) {}
 
   async save(data: CreateUserParams): Promise<CreateUserRepositoryResult> {
