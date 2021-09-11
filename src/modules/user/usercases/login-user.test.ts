@@ -12,6 +12,10 @@ class HashingSpy implements HashingService {
     this.compareCount += 1
     return this.compareReturn
   }
+
+  async encode(value: string): Promise<string> {
+      throw new Error("Method not implemented.");
+  }
 }
 
 class FindByEmailRepositorySpy implements FindByEmailRepository {

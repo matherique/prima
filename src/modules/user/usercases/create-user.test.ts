@@ -1,5 +1,6 @@
 import { CreateUserUsecase } from "./create-user";
 import { CreateUserRepository, CreateUserRepositoryParams, CreateUserRepositoryResult } from "./ports/create-user-repository";
+import { HashingService } from "./ports/hashing-service";
 
 class CreateUserRepositorySpy implements CreateUserRepository {
   public saveCount: number = 0;
@@ -14,11 +15,27 @@ class CreateUserRepositorySpy implements CreateUserRepository {
   }
 }
 
-function makeSut() {
-  const repositorySpy = new CreateUserRepositorySpy()
-  const sut = new CreateUserUsecase(repositorySpy)
+class HashingSpy implements HashingService {
+  public encodeResult: string
+  public encodeCallCount: number = 0
 
-  return { repositorySpy, sut }
+  async compare(_value: string, _hashed: string): Promise<boolean> {
+    throw new Error("Method not implemented.");
+  }
+
+  async encode(value: string): Promise<string> {
+    this.encodeCallCount += 1
+    return this.encodeResult
+  }
+
+}
+
+function makeSut() {
+  const hashingSpy = new HashingSpy()
+  const repositorySpy = new CreateUserRepositorySpy()
+  const sut = new CreateUserUsecase(repositorySpy, hashingSpy)
+
+  return { repositorySpy, sut, hashingSpy }
 }
 
 describe("Create user", () => {
@@ -37,10 +54,11 @@ describe("Create user", () => {
   })
   
   it("should call save with corret params", async () => {
-    const { repositorySpy, sut } = makeSut()
+    const { repositorySpy, sut, hashingSpy } = makeSut()
+    hashingSpy.encodeResult = 'hashed_password'
     await sut.create(userData)
     expect(repositorySpy.saveCount).toBe(1)
-    expect(repositorySpy.saveParams).toEqual(userData)
+    expect(repositorySpy.saveParams).toEqual({ ...userData, password: 'hashed_password' })
   })
 
   it("should return a new user with corret params", async () => {
@@ -61,14 +79,28 @@ describe("Create user", () => {
   it("should validate and return null if email alreaby been used", async () => {
     const { repositorySpy, sut } = makeSut()
 
-    jest.spyOn(repositorySpy, 'save').mockImplementation(() => {
-      repositorySpy.saveCount += 1
-      return null
-    })
+    repositorySpy.saveReturn = null
 
     const result = await sut.create(userData)
     expect(result).toBeNull()
     expect(repositorySpy.saveCount).toBe(1)
   })
 
+  it("should call encode to create a hashed password", async () => {
+    const { repositorySpy, sut, hashingSpy } = makeSut()
+    const insertedUser = {
+      ...userData,
+      id: 1,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    }
+    repositorySpy.saveReturn = insertedUser
+
+    const result = await sut.create(userData)
+
+    expect(result).toEqual(insertedUser)
+    expect(repositorySpy.saveCount).toBe(1)
+    expect(hashingSpy.encodeCallCount).toBe(1)
+
+  })
 })
