@@ -1,7 +1,7 @@
 # 📚 Learning Prisma with TDD
 [![Coverage Status](https://coveralls.io/repos/github/matherique/prisma/badge.svg?branch=main)](https://coveralls.io/github/matherique/prisma?branch=main)
 
-> Simple API to practice Prisma and TDD
+> Simple API to learning Prisma with TDD
 
 
 ## Install
