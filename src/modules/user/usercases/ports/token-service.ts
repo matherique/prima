@@ -1,3 +1,3 @@
 export interface TokenService {
-  create(payload: any): Promise<string>
+  create(payload: any, expiresIn: number): Promise<string>
 }
