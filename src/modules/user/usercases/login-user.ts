@@ -23,7 +23,8 @@ export class LoginUser implements LoginUserUsecase {
       return null
     }
     
-    const token = await this.tokenService.create({ id: user.id })
+    const expires = 2 * 60 * 60 // 2h 
+    const token = await this.tokenService.create({ id: user.id }, expires)
 
     return { token }
   }

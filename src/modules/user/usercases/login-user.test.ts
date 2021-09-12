@@ -33,7 +33,7 @@ class FindByEmailRepositorySpy implements FindByEmailRepository {
 class TokenServiceSpy implements TokenService {
   public createReturn: string
 
-  async create(payload: any): Promise<string> {
+  async create(payload: any, expiresIn: number): Promise<string> {
     return this.createReturn
   }
 }
