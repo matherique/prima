@@ -1,40 +1,23 @@
 import { JWT } from "./jwt"
-import jsonwebtoken from 'jsonwebtoken'
 
-jest.mock('jsonwebtoken', () => {
-  return {
-    sign: jest.fn()
-  }
-})
-
-const mockedJsonwebtoken = jsonwebtoken as jest.Mocked<typeof jsonwebtoken>
-
-describe("Jsonwebtoken", () => {
+describe("JWT", () => {
   const secret = 'secret'
 
-  test("should return a valid token", async () => {
+  test("should create and validate token", async () => {
     const jwt = new JWT(secret)
-    const fakeToken = "random_token"
-    mockedJsonwebtoken.sign.mockImplementationOnce(() => fakeToken)
     const token = await jwt.create({ random: 'payload' }, 1)
-
-    expect(token).toBe(fakeToken)
+    const payload = await jwt.verify(token);
+    
+    expect(payload).toHaveProperty('random')
   })
 
-  test("should call sign with the corrent secret and payload", async () => {
+  test("should throw and erro if token is invalid", async () => {
     const jwt = new JWT(secret)
-    const fakeToken = "random_token"
-
-    const params = {
-      payload: { random: 'payload' },
-      secret, 
-      options: { expiresIn: 1 }
-    }
-
-    mockedJsonwebtoken.sign.mockImplementationOnce(() => fakeToken)
-    await jwt.create(params.payload, params.options.expiresIn)
-
+    const token = await jwt.create({ random: 'payload' }, 1)
     
-    expect(mockedJsonwebtoken.sign).toHaveBeenCalledWith(...Object.values(params))
+    const modifiedToken = token + '_trash'
+    const promise = jwt.verify(modifiedToken);
+    
+    expect(promise).rejects.toThrow()
   })
 })
