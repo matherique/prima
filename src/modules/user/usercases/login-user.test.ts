@@ -33,6 +33,10 @@ class FindByEmailRepositorySpy implements FindByEmailRepository {
 class TokenServiceSpy implements TokenService {
   public createReturn: string
 
+  verify(token: string): Promise<string> {
+      throw new Error("Method not implemented.");
+  }
+
   async create(payload: any, expiresIn: number): Promise<string> {
     return this.createReturn
   }
