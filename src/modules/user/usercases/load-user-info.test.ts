@@ -51,6 +51,19 @@ describe("Load user info", () => {
     expect(spy.findParam).toBe(id)
   })
 
-  test.todo("should call find with corret id")
-  test.todo("should return a valid user without password")
+  test("should return a valid user without password", async () => {
+    const id = 10
+    const { sut, spy } = makeSut()
+    spy.findResponse = { 
+      id: 1, 
+      firstName: 'any_firstname', 
+      lastName: 'any_lastName', 
+      email: 'any_email@email.com',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    }
+
+    const resp = await sut.load(id)
+    expect(resp).not.toHaveProperty("password")
+  })
 })
